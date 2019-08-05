@@ -114,7 +114,7 @@ static int open_input_file(const char *filename, bool &isOpen)
 
 	for (i = 0; i < ifmt_ctx->nb_streams; i++)
 	{
-		//avcodec_free_context(&stream_ctx[i].dec_ctx);
+		avcodec_free_context(&stream_ctx[i].dec_ctx);
 		AVStream *stream = ifmt_ctx->streams[i];
 		AVCodec *dec = avcodec_find_decoder(stream->codecpar->codec_id);
 		AVCodecContext *codec_ctx;
@@ -439,7 +439,13 @@ int main(int argc, char **argv)
 				frame->pts = frame->best_effort_timestamp;
 				ret = encode_write_frame(frame, stream_index, NULL);
 				if (ret < 0)
+				{
+					char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
+					char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
+					printf("error %s\n", errstr);
+					return ret;
 					goto end;
+				}
 			}
 			else
 			{
