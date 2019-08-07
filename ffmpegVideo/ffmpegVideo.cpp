@@ -503,158 +503,158 @@ static int get_format_from_sample_fmt(const char **fmt,
 
 int main(int argc, char **argv)
 {
-	const char* slides[3] =
-	{
-		"E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\system.mp4",
-		"E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\Slide1.mp4",
-		"E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\Slide2.mp4"
-	};
+// 	const char* slides[3] =
+// 	{
+// 		"E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\system.mp4",
+// 		"E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\Slide1.mp4",
+// 		"E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\Slide2.mp4"
+// 	};
+// 
+// 	const char* out = "E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\final.mp4";
+// 
+// 	int ret = 0, got_frame;
+// 	refcount = 1;
+// 
+// 	src_filename = slides[0];
+// 	dst_filename = out;
+// 
+// 	ret = open_input_file(slides[0]);
+// 	if (ret < 0)
+// 	{
+// 		char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
+// 		char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
+// 		printf("ERROR %s\n", errstr);
+// 		goto end;
+// 	}
+// 
+// 	ret = open_output_file(out);
+// 	if (ret < 0)
+// 	{
+// 		char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
+// 		char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
+// 		printf("ERROR %s\n", errstr);
+// 		goto end;
+// 	}
+// 
+// 	/* dump input information to stderr */
+// 	av_dump_format(fmt_ctx, 0, src_filename, 0);
+// 
+// 	if (!audio_stream && !video_stream)
+// 	{
+// 		fprintf(stderr, "Could not find audio or video stream in the input, aborting\n");
+// 		ret = 1;
+// 		goto end;
+// 	}
+// 
+// 	for (int index = 0; index < 3; index++)
+// 	{
+// 		if (!fmt_ctx)
+// 		{
+// 			ret = open_input_file(slides[index]);
+// 			if (ret < 0)
+// 			{
+// 				char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
+// 				char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
+// 				printf("ERROR %s\n", errstr);
+// 				goto end;
+// 			}
+// 		}
+// 
+// 
+// 		/* initialize packet, set data to NULL, let the demuxer fill it */
+// 		av_init_packet(&pkt);
+// 		pkt.data = NULL;
+// 		pkt.size = 0;
+// 
+// 		/* read frames from the file */
+// 		while (av_read_frame(fmt_ctx, &pkt) >= 0)
+// 		{
+// 			do
+// 			{
+// 				AVFrame *frame = NULL;
+// 				frame = av_frame_alloc();
+// 				av_frame_make_writable(frame);
+// 				ret = decode_packet(frame, &got_frame, 0);
+// 				if (ret < 0)
+// 				{
+// 					char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
+// 					char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
+// 					printf("ERROR decode_packet %s\n", errstr);
+// 					break;
+// 				}
+// 
+// 				if (got_frame)
+// 				{
+// 					encode_frame(stream_ctx[pkt.stream_index].enc_ctx, frame, &enc_pkt);
+// 				}
+// 
+// 				av_frame_free(&frame);
+// 				pkt.data += ret;
+// 				pkt.size -= ret;
+// 			} while (pkt.size > 0);
+// 			av_packet_unref(&enc_pkt);
+// 		}
+// 
+// 		/* flush cached frames */
+// 		pkt.data = NULL;
+// 		pkt.size = 0;
+// 		for (int index = 0; index < out_fmt_ctx->nb_streams; index++)
+// 		{
+// 			ret = avcodec_send_packet(stream_ctx[index].enc_ctx, NULL);
+// 			// In particular, we don't expect AVERROR(EAGAIN), because we read all
+// 			// decoded frames with avcodec_receive_frame() until done.
+// 			if (ret < 0)
+// 				return ret == AVERROR_EOF ? 0 : ret;
+// 
+// 			while (1)
+// 			{
+// 				ret = avcodec_receive_frame(stream_ctx[index].enc_ctx, NULL);
+// 				if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
+// 					return ret;
+// 			}
+// 
+// 			//decode_packet(NULL, &got_frame, 1);
+// 		}
+// 
+// 		printf("Demuxing succeeded.\n");
+// 
+// 		if (audio_stream)
+// 		{
+// 			enum AVSampleFormat sfmt = stream_ctx[audio_stream_idx].dec_ctx->sample_fmt;
+// 			int n_channels = stream_ctx[audio_stream_idx].dec_ctx->channels;
+// 			const char *fmt;
+// 
+// 			if (av_sample_fmt_is_planar(sfmt))
+// 			{
+// 				const char *packed = av_get_sample_fmt_name(sfmt);
+// 				printf("Warning: the sample format the decoder produced is planar "
+// 					   "(%s). This example will output the first channel only.\n",
+// 					   packed ? packed : "?");
+// 				sfmt = av_get_packed_sample_fmt(sfmt);
+// 				n_channels = 1;
+// 			}
+// 
+// 			if ((ret = get_format_from_sample_fmt(&fmt, sfmt)) < 0)
+// 				goto end;
+// 		}
+// 		avformat_close_input(&fmt_ctx);
+// 	}
+// end:
+// 	av_write_trailer(out_fmt_ctx);
+// 	for (int index = 0; index < out_fmt_ctx->nb_streams; index++)
+// 	{
+// 		avcodec_free_context(&stream_ctx[index].dec_ctx);
+// 		if (out_fmt_ctx && out_fmt_ctx->nb_streams > index && out_fmt_ctx->streams[index] && stream_ctx[index].enc_ctx)
+// 			avcodec_free_context(&stream_ctx[index].enc_ctx);
+// 	}
+// 	av_free(stream_ctx);
+// 	
+// 
+// 	if (out_fmt_ctx && !(out_fmt_ctx->oformat->flags & AVFMT_NOFILE))
+// 		avio_closep(&out_fmt_ctx->pb);
+// 	//avformat_free_context(out_fmt_ctx);
+// 	avformat_close_input(&out_fmt_ctx);
 
-	const char* out = "E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\final.mp4";
-
-	int ret = 0, got_frame;
-	refcount = 1;
-
-	src_filename = slides[0];
-	dst_filename = out;
-
-	ret = open_input_file(slides[0]);
-	if (ret < 0)
-	{
-		char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
-		char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
-		printf("ERROR %s\n", errstr);
-		goto end;
-	}
-
-	ret = open_output_file(out);
-	if (ret < 0)
-	{
-		char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
-		char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
-		printf("ERROR %s\n", errstr);
-		goto end;
-	}
-
-	/* dump input information to stderr */
-	av_dump_format(fmt_ctx, 0, src_filename, 0);
-
-	if (!audio_stream && !video_stream)
-	{
-		fprintf(stderr, "Could not find audio or video stream in the input, aborting\n");
-		ret = 1;
-		goto end;
-	}
-
-	for (int index = 0; index < 3; index++)
-	{
-		if (!fmt_ctx)
-		{
-			ret = open_input_file(slides[index]);
-			if (ret < 0)
-			{
-				char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
-				char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
-				printf("ERROR %s\n", errstr);
-				goto end;
-			}
-		}
-
-
-		/* initialize packet, set data to NULL, let the demuxer fill it */
-		av_init_packet(&pkt);
-		pkt.data = NULL;
-		pkt.size = 0;
-
-		/* read frames from the file */
-		while (av_read_frame(fmt_ctx, &pkt) >= 0)
-		{
-			do
-			{
-				AVFrame *frame = NULL;
-				frame = av_frame_alloc();
-				av_frame_make_writable(frame);
-				ret = decode_packet(frame, &got_frame, 0);
-				if (ret < 0)
-				{
-					char errbuf[AV_ERROR_MAX_STRING_SIZE]{ 0 };
-					char *errstr = av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret);
-					printf("ERROR decode_packet %s\n", errstr);
-					break;
-				}
-
-				if (got_frame)
-				{
-					encode_frame(stream_ctx[pkt.stream_index].enc_ctx, frame, &enc_pkt);
-				}
-
-				av_frame_free(&frame);
-				pkt.data += ret;
-				pkt.size -= ret;
-			} while (pkt.size > 0);
-			av_packet_unref(&enc_pkt);
-		}
-
-		/* flush cached frames */
-		pkt.data = NULL;
-		pkt.size = 0;
-		for (int index = 0; index < out_fmt_ctx->nb_streams; index++)
-		{
-			ret = avcodec_send_packet(stream_ctx[index].enc_ctx, NULL);
-			// In particular, we don't expect AVERROR(EAGAIN), because we read all
-			// decoded frames with avcodec_receive_frame() until done.
-			if (ret < 0)
-				return ret == AVERROR_EOF ? 0 : ret;
-
-			while (1)
-			{
-				ret = avcodec_receive_frame(stream_ctx[index].enc_ctx, NULL);
-				if (ret < 0 && ret != AVERROR(EAGAIN) && ret != AVERROR_EOF)
-					return ret;
-			}
-
-			//decode_packet(NULL, &got_frame, 1);
-		}
-
-		printf("Demuxing succeeded.\n");
-
-		if (audio_stream)
-		{
-			enum AVSampleFormat sfmt = stream_ctx[audio_stream_idx].dec_ctx->sample_fmt;
-			int n_channels = stream_ctx[audio_stream_idx].dec_ctx->channels;
-			const char *fmt;
-
-			if (av_sample_fmt_is_planar(sfmt))
-			{
-				const char *packed = av_get_sample_fmt_name(sfmt);
-				printf("Warning: the sample format the decoder produced is planar "
-					   "(%s). This example will output the first channel only.\n",
-					   packed ? packed : "?");
-				sfmt = av_get_packed_sample_fmt(sfmt);
-				n_channels = 1;
-			}
-
-			if ((ret = get_format_from_sample_fmt(&fmt, sfmt)) < 0)
-				goto end;
-		}
-		avformat_close_input(&fmt_ctx);
-	}
-end:
-	av_write_trailer(out_fmt_ctx);
-	for (int index = 0; index < out_fmt_ctx->nb_streams; index++)
-	{
-		avcodec_free_context(&stream_ctx[index].dec_ctx);
-		if (out_fmt_ctx && out_fmt_ctx->nb_streams > index && out_fmt_ctx->streams[index] && stream_ctx[index].enc_ctx)
-			avcodec_free_context(&stream_ctx[index].enc_ctx);
-	}
-	av_free(stream_ctx);
-	
-
-	if (out_fmt_ctx && !(out_fmt_ctx->oformat->flags & AVFMT_NOFILE))
-		avio_closep(&out_fmt_ctx->pb);
-	//avformat_free_context(out_fmt_ctx);
-	avformat_close_input(&out_fmt_ctx);
-
-	
-	return ret < 0;
+system("ffmpeg -i E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\system.mp4 -ss 00:00:03 -t 00:00:08 -async 1 E:\\Projects\\GIT\\ThirdParty\\VideoEditor\\test\\cut.mp4");
+	return 0;
 }
